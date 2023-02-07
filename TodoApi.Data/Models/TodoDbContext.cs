@@ -8,7 +8,6 @@ public class TodoDbContext : IdentityDbContext<TodoUser>
     public TodoDbContext(DbContextOptions<TodoDbContext> options) : base(options) { }
 
     public DbSet<Todo> Todos => Set<Todo>();
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<Todo>()

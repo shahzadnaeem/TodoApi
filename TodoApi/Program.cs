@@ -1,5 +1,6 @@
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
+
 using TodoApi;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,8 +16,7 @@ builder.Services.AddAuthorizationBuilder().AddCurrentUserHandler();
 builder.Services.AddTokenService();
 
 // Configure the database
-var connectionString = builder.Configuration.GetConnectionString("Todos") ?? "Data Source=.db/Todos.db";
-builder.Services.AddSqlite<TodoDbContext>(connectionString);
+builder.AddDatabase();
 
 // Configure identity
 builder.Services.AddIdentityCore<TodoUser>()
