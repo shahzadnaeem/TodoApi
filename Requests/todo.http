@@ -1,11 +1,12 @@
 ### Create a user
-@password = <put a password here>
+@username = user1
+@password = Test1234@
 
 POST http://localhost:5000/users
 Content-Type: application/json
 
 {
-    "username": "myuser",
+    "username": "{{username}}",
     "password": "{{password}}"
 }
 
@@ -15,11 +16,13 @@ POST http://localhost:5000/users/token
 Content-Type: application/json
 
 {
-    "username": "myuser",
+    "username": "{{username}}",
     "password": "{{password}}"
 }
 
-@token = <put JWT token here>
+### Need this comment to end request data - otherwise the following gets sent in the above request!
+
+@token = <put JWT (token) here>
 
 ### Create a todo
 
