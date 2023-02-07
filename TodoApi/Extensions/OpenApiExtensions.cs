@@ -32,4 +32,19 @@ public static class OpenApiExtensions
         });
     }
 
+    public static void AddCustomSwaggerGen(this WebApplicationBuilder builder)
+    {
+        var config = builder.Configuration;
+
+        builder.Services.AddSwaggerGen(c =>
+        {
+            var dotNetVer = System.Environment.Version.ToString();
+            var dbProvider = config.GetValue("DbProvider", DatabaseExtensions.SQLITE);
+
+            c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+            {
+                Title = $"TodoApi (.NET {dotNetVer} - DB {dbProvider})"
+            });
+        });
+    }
 }

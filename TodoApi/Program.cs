@@ -4,6 +4,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using TodoApi;
 
 var builder = WebApplication.CreateBuilder(args);
+var config = builder.Configuration;
 
 // Add Serilog
 builder.AddSerilog();
@@ -27,7 +28,7 @@ builder.Services.AddCurrentUser();
 
 // Configure Open API
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.AddCustomSwaggerGen();
 builder.Services.Configure<SwaggerGeneratorOptions>(o => o.InferSecuritySchemes = true);
 
 // Configure rate limiting

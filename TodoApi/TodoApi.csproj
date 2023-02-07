@@ -39,6 +39,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TodoApi.Data\Models\Models.csproj" />
     <ProjectReference Include="..\TodoApi.Data\Migrations.Sqlite\Migrations.Sqlite.csproj" />
+    <ProjectReference Include="..\TodoApi.Data\Migrations.Postgres\Migrations.Postgres.csproj" />
   </ItemGroup>
 
   

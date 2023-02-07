@@ -4,11 +4,11 @@ namespace TodoApi;
 
 public static class DatabaseExtensions
 {
-    public static WebApplicationBuilder AddDatabase(this WebApplicationBuilder builder)
-    {
-        const string SQLITE = "Sqlite";
-        const string POSTGRES = "Postgres";
+    public const string SQLITE = "Sqlite";
+    public const string POSTGRES = "Postgres";
 
+    public static void AddDatabase(this WebApplicationBuilder builder)
+    {
         var config = builder.Configuration;
 
         var dbProvider = config.GetValue("DbProvider", SQLITE);
@@ -22,9 +22,13 @@ public static class DatabaseExtensions
             var connectionString = builder.Configuration.GetConnectionString(dbProvider);
             System.Console.WriteLine($"# Got Sqlite connection string: '{connectionString}'");
 
+            var assembly = typeof(Migrations.Sqlite.Identifier).Assembly.GetName().Name;
+
             builder.Services.AddDbContext<TodoDbContext>(options =>
             {
-                options.UseSqlite(connectionString);
+                options.UseSqlite(
+                    connectionString,
+                    x => x.MigrationsAssembly(assembly));
             });
         }
         else if (dbProvider == POSTGRES)
@@ -32,18 +36,19 @@ public static class DatabaseExtensions
             var connectionString = builder.Configuration.GetConnectionString(dbProvider);
             System.Console.WriteLine($"# Got Postgres connection string: '{connectionString}'");
 
-            throw new Exception($"FATAL: Postgres can't use Sqlite Migrations!");
+            var assembly = typeof(Migrations.Postgres.Identifier).Assembly.GetName().Name;
 
             builder.Services.AddDbContext<TodoDbContext>(options =>
             {
-                options.UseNpgsql(connectionString);
+                options.UseNpgsql(
+                    connectionString,
+                    x => x.MigrationsAssembly(assembly));
+
             });
         }
         else
         {
             throw new Exception($"FATAL: Unknown Database Provider: '{dbProvider}'");
         }
-
-        return builder;
     }
 }
