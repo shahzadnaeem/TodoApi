@@ -2,18 +2,22 @@
 
 @if (!string.IsNullOrEmpty(CurrentUser))
 {
-    <ul class="nav justify-content-center">
-        <li class="nav-item">
-            Logged in as <strong>@CurrentUser</strong>
-            <a class="btn btn-primary" role="button" @onclick="@Logout">Logout</a>
-        </li>
-    </ul>
+    <div class="app">
+            <div class="nav-item d-flex gap-4 justify-content-end align-items-center">
+                <div class="fs-4 text-secondary">Logged in as <strong>@CurrentUser</strong></div>
+                <div>
+                    <a class="btn btn-primary" role="button" @onclick="@Logout">Logout</a>
+                </div>
+            </div>
 
-    <TodoList OnForbidden="@Logout" />
+        <TodoList OnForbidden="@Logout" />
+    </div>
 }
 else
 {
-    <LogInForm OnLoggedIn="@HandleLogin" SocialProviders="@SocialProviders" />
+    <div class="app">
+        <LogInForm OnLoggedIn="@HandleLogin" SocialProviders="@SocialProviders" />
+    </div>
 }
 
 @code {

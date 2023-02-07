@@ -16,9 +16,9 @@
     <link href="Todo.Web.Client.styles.css" rel="stylesheet" /> -->
 </head>
 
-<body>
-    <div class="container">
-        <main role="main" class="pb-3">
+<body class="bg-dark">
+    <div class="container bg-light">
+        <main role="main">
             <component type="typeof(Todo.Web.Client.TodoApp)" 
                        param-CurrentUser="@Model.CurrentUserName"
                        param-SocialProviders="@Model.ProviderNames" 

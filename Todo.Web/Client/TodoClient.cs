@@ -30,6 +30,13 @@ public class TodoClient
         return createdTodo;
     }
 
+    public async Task<bool> UpdateTodoAsync(TodoItem todo)
+    {
+        var response = await _client.PutAsJsonAsync($"todos/{todo.Id}", todo);
+
+        return response.IsSuccessStatusCode;
+    }
+
     public async Task<bool> DeleteTodoAsync(int id)
     {
         var response = await _client.DeleteAsync($"todos/{id}");

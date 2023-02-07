@@ -8,7 +8,7 @@
 }
 else
 {
-    <h6 class="mb-3">Todo List</h6>
+    <h3 class="mb-3">Todo List</h3>
 
     <EditForm @ref="@form" Model="@this" OnValidSubmit="@AddTodo" class="d-flex justify-content-center align-items-center mb-4">
         <DataAnnotationsValidator />
@@ -23,18 +23,22 @@ else
         {
             <li class="list-group-item d-flex justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom rounded-0 mb-2" @key="@todo.Id">
                 <div class="d-flex align-items-center">
-                    <input class="form-check-input me-2" type="checkbox" value="" aria-label="..." />
+                    <input class="form-check-input me-2" type="checkbox" checked=@todo.IsComplete aria-label="..." @onclick="@(() => ToggleComplete(todo))" />
                     @todo.Title
                 </div>
-                <a data-mdb-toggle="tooltip" title="Remove item" style="text-decoration:none" @onclick="@(() => DeleteTodo(todo))">🗙</a>
+                <a class="todo-delete" data-mdb-toggle="tooltip" title="Remove item" style="text-decoration:none" @onclick="@(() => DeleteTodo(todo))">🗙</a>
             </li>
         }
     </ul>
+
+    <h5>Status: @status</h5>
 }
 
 @code {
     List<TodoItem>? todos;
     EditForm? form;
+
+    String status = "OK";
 
     [Required]
     public string? NewTodo { get; set; }
@@ -45,6 +49,17 @@ else
     protected override async Task OnInitializedAsync()
     {
         await LoadTodos();
+        SetStatus();
+    }
+
+    void SetStatus(string error="")
+    {
+        if ( error.Length == 0 ) {
+            var done = todos.Where(t=>t.IsComplete).Count();
+            status = $"OK: {todos.Count} todos, {done} done";
+        } else {
+            status = error;
+        }
     }
 
     async Task LoadTodos()
@@ -55,6 +70,8 @@ else
         {
             await OnForbidden.InvokeAsync();
         }
+
+        SetStatus();
     }
 
     async Task AddTodo()
@@ -66,6 +83,21 @@ else
             form!.EditContext!.MarkAsUnmodified();
             todos!.Add(createdTodo);
         }
+
+        SetStatus();
+    }
+
+    async Task ToggleComplete(TodoItem todo)
+    {
+        todo.IsComplete = ! todo.IsComplete;
+
+        var result = await Client.UpdateTodoAsync(todo);
+
+        if ( result ) {
+            SetStatus();            
+        } else {
+            SetStatus("Failed to update Todo!");
+        }
     }
 
     async Task DeleteTodo(TodoItem todo)
@@ -74,5 +106,7 @@ else
         {
             todos!.Remove(todo);
         }
+
+        SetStatus();
     }
 }
