@@ -12,29 +12,8 @@ html {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-html {
-    min-height: 100vh;
-}
-
 body {
     min-height: 100vh;
-}
-
-.app {
-    min-height: 100vh;
-    max-width: 80%;
-    margin-inline: auto;
-    padding-top: 1.0rem;
-}
-
-.todo-delete {
-    color: firebrick;
-}
-
-.todo-delete:hover {
-    color: rgb(255, 0, 0);
-    font-weight: bolder;
-    cursor: pointer;
 }
 
 .valid.modified:not([type=checkbox]) {
