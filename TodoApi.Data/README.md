@@ -1,23 +1,26 @@
-# .NET Core Multiple Database Support
+# .NET Core Multiple Database Provdiers Support
 
 ## Introduction
 
-This document outlines how run an application on multiple databases.
+This document outlines allowing multiple database providers for an application.
 
-In this example, we support Sqlite and PostgreSQL
+Here, PostgreSQL is added to an application using Sqlite.
 
 ## Organisation
 
-As you can see, the following sub-project directory structure is used.
+The project directory structure has been updated as follows
 
-- Models
-  - This contains the EF Core models and a DbContext
-- Migrations.Sqlite
-  - This contains the Sqlite specific migrations for Models
-- Migrations.Postgres
-  - This contains the Postgres specific migrations for Models
+- TodoApi.Data directory with three new projects from the main `TodoApi` project
+  - Models
+    - This contains the EF Core models and a DbContext
+  - Migrations.Sqlite
+    - This contains the Sqlite specific migrations for Models
+  - Migrations.Postgres
+    - This contains the Postgres specific migrations for Models
+- TodoApi
+  - The main `TodoApi` project which implements the API
 
-All of the above projects are referenced by the main `TodoApi` project which can be configured to select either Sqlite or Postgres.
+The main `TodoApi` project now references all three of the TodoApi.Data projects above.
 
 ## Some Notes
 
@@ -27,7 +30,7 @@ All of the above projects are referenced by the main `TodoApi` project which can
 - Add a `DbProvider` entry to `appsettings.Development.json` to select which database to use.
   - A connection string is added for each named `DbProvider`
   - NOTE: Do not add a password to the connection string!
-    - Add a secret named `DbPassword` using the `dotnet user-secrets set`
+    - Add a secret named `DbPassword` using the `dotnet user-secrets set` command as shown below:
 
       ```sh
       # Run the command from the TodoApi project
@@ -37,17 +40,15 @@ All of the above projects are referenced by the main `TodoApi` project which can
       # You should not need to 'init' as that was done earlier
       ```
 
-- `DatabaseExtensions.cs` added to support selecting the configured `DbProvider` at 
-- startup.
+- `DatabaseExtensions.cs` added to support selecting the configured `DbProvider` at startup.
   - Use the correct connection string and `Assembly` for the configured `DbProvider`
+    - Using the `DbPassword` secret where the connection string needs a password
 
 ### Managing Migrations
 
-When adding migrations, the migration has to be added to each migrations project in turn.
+New migrations need to be added to each migration project to ensure that they all remain in sync.
 
-NOTE: Adding a new database (in our case, Postgres was added after Sqlite). The new database will need an `Initial` migration added first to sync it with the existing databases. This will result in a different migration history for new databases.
-
-When support was added for Postgres, the following `Initial` migration was added - a single migration, incorporating the two migrations that exist for Sqlite.
+NOTE: On adding a new database, in this example, Postgres, The new database will need to be initialised. This is done by adding an `Initial` migration to sync it with the existing database configuration. This may result in different initial migration histories for newer databases.
 
 ```sh
 # Run the commands from the TodoApi project
