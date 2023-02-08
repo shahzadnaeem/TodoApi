@@ -32,7 +32,7 @@ public static class OpenApiExtensions
         });
     }
 
-    public static void AddCustomSwaggerGen(this WebApplicationBuilder builder)
+    public static WebApplicationBuilder AddCustomSwaggerGen(this WebApplicationBuilder builder)
     {
         var config = builder.Configuration;
 
@@ -46,5 +46,7 @@ public static class OpenApiExtensions
                 Title = $"TodoApi (.NET {dotNetVer} - DB {dbProvider})"
             });
         });
+
+        return builder;
     }
 }

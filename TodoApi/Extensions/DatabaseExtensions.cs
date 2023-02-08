@@ -10,7 +10,7 @@ public static class DatabaseExtensions
     public const string SQLITE = "Sqlite";
     public const string POSTGRES = "Postgres";
 
-    public static void AddDatabase(this WebApplicationBuilder builder)
+    public static WebApplicationBuilder AddDatabase(this WebApplicationBuilder builder)
     {
         var config = builder.Configuration;
 
@@ -57,5 +57,7 @@ public static class DatabaseExtensions
         {
             throw new Exception($"FATAL: Unknown Database Provider: '{dbProvider}'");
         }
+
+        return builder;
     }
 }
