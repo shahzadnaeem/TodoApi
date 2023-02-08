@@ -1,9 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 
+using Npgsql;
+
 namespace TodoApi;
 
 public static class DatabaseExtensions
 {
+    public const string DB_PASSWORD_SECRET_KEY = "DbPassword";
     public const string SQLITE = "Sqlite";
     public const string POSTGRES = "Postgres";
 
@@ -34,7 +37,20 @@ public static class DatabaseExtensions
         else if (dbProvider == POSTGRES)
         {
             var connectionString = builder.Configuration.GetConnectionString(dbProvider);
-            System.Console.WriteLine($"# Got Postgres connection string: '{connectionString}'");
+
+            if (builder.Environment.IsDevelopment())
+            {
+                // Use password from user-secrets
+                var dbPassword = config[DB_PASSWORD_SECRET_KEY];
+
+                // Update using the Postgres specific builder
+                var cb = new NpgsqlConnectionStringBuilder(connectionString);
+                cb.Password = dbPassword;
+
+                connectionString = cb.ConnectionString;
+            }
+
+            System.Console.WriteLine($"# Got Postgres connection string: '{connectionString}' - Password from user-secrets");
 
             var assembly = typeof(Migrations.Postgres.Identifier).Assembly.GetName().Name;
 

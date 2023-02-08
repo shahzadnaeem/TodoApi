@@ -26,7 +26,19 @@ All of the above projects are referenced by the main `TodoApi` project which can
 - Project references added to all of the above `Models`, `Migrations.Sqlite` and `Migrations.Postgres` projects
 - Add a `DbProvider` entry to `appsettings.Development.json` to select which database to use.
   - A connection string is added for each named `DbProvider`
-- `DatabaseExtensions.cs` added to support selecting the configured `DbProvider` at startup.
+  - NOTE: Do not add a password to the connection string!
+    - Add a secret named `DbPassword` using the `dotnet user-secrets set`
+
+      ```sh
+      # Run the command from the TodoApi project
+      $ cd TodoApi
+
+      $ dotnet user-secrets set "DbPassword" "password123"
+      # You should not need to 'init' as that was done earlier
+      ```
+
+- `DatabaseExtensions.cs` added to support selecting the configured `DbProvider` at 
+- startup.
   - Use the correct connection string and `Assembly` for the configured `DbProvider`
 
 ### Managing Migrations
@@ -35,10 +47,10 @@ When adding migrations, the migration has to be added to each migrations project
 
 NOTE: Adding a new database (in our case, Postgres was added after Sqlite). The new database will need an `Initial` migration added first to sync it with the existing databases. This will result in a different migration history for new databases.
 
-When support was added for Postgres, the following `Initial` migration was added - a single migration, incorporating the two migration that exist for Sqlite.
+When support was added for Postgres, the following `Initial` migration was added - a single migration, incorporating the two migrations that exist for Sqlite.
 
 ```sh
-# Run the commands from the main project
+# Run the commands from the TodoApi project
 $ cd TodoApi
 
 # Specify the migrations project we want to update and also its `DbProvider` config
