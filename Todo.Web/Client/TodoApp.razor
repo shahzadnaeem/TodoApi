@@ -1,24 +1,22 @@
 ﻿@inject TodoClient Client
 
+    <div class="app bg-light">
 @if (!string.IsNullOrEmpty(CurrentUser))
 {
-    <div class="app">
-            <div class="nav-item d-flex gap-4 justify-content-end align-items-center">
-                <div class="fs-4 text-secondary">Logged in as <strong>@CurrentUser</strong></div>
-                <div>
-                    <a class="btn btn-primary" role="button" @onclick="@Logout">Logout</a>
-                </div>
+        <div class="nav-item d-flex gap-4 justify-content-end align-items-center">
+            <div class="fs-4 text-secondary">Logged in as <strong>@CurrentUser</strong></div>
+            <div>
+                <a class="btn btn-primary" role="button" @onclick="@Logout">Logout</a>
             </div>
+        </div>
 
         <TodoList OnForbidden="@Logout" />
-    </div>
 }
 else
 {
-    <div class="app">
         <LogInForm OnLoggedIn="@HandleLogin" SocialProviders="@SocialProviders" />
-    </div>
 }
+    </div>
 
 @code {
     [Parameter] 
