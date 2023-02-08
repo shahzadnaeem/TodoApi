@@ -1,0 +1,23 @@
+a {
+    background-color: inherit;
+}
+
+.todo-delete {
+    color: firebrick;
+}
+
+.todo-delete:hover {
+    color: rgb(255, 0, 0);
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+.all-done {
+    color: green;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.some-todo {
+    color: darkblue;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
